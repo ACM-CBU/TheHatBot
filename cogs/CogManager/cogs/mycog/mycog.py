@@ -22,7 +22,7 @@ class Mycog(commands.Cog):
     @commands.command()
     async def gitpull(self, ctx):
         os.system('git pull')
-        await ctx.send("I pulled the code!")
+        await ctx.send("I pulled the code! :smirk:")
 
     @commands.command()
     async def sayhi(self, ctx):
