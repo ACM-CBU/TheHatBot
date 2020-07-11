@@ -28,5 +28,5 @@ class School(commands.Cog):
         await ctx.send(text)
 
     @commands.command()
-    async def set_daily_homework_reminders(self, ctx, ):
+    async def set_daily_homework_reminders(self, ctx):
         schedule.every().day.at()

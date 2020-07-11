@@ -1,7 +1,6 @@
 from redbot.core import commands
 from redbot.core import Config
 import os
-from git.repo.base import Repo
 
 
 class Mycog(commands.Cog):
