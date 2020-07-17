@@ -13,7 +13,7 @@ class AcmApi(commands.Cog):
     @commands.command()
     async def post(self, ctx, msg):
         url = 'http://10.147.19.177/posts'
-        myobj = {"Discord": msg}
+        myobj = {"username": "Discord", "msg": msg }
         headers = {'Content-type': 'application/json'}
         x = requests.post(url, data = json.dumps(myobj), headers=headers)
         await ctx.send("Message posted")
