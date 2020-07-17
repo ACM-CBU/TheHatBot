@@ -6,9 +6,10 @@ import requests
 
 class AcmApi(commands.Cog):
     @commands.command()
-        async def msg(self, ctx, map):
+    async def msg(self, ctx, map):
         await ctx.send(map)
 
+    @commands.command()
     async def post(self, ctx, msg):
         url = '10.147.19.177'
         myobj = {"Discord": msg}
