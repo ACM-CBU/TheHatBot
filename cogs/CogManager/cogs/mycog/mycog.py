@@ -21,8 +21,8 @@ class Mycog(commands.Cog):
 
     @commands.command()
     async def gitpull(self, ctx):
-        os.system('git pull')
-        await ctx.send("I pulled the code! :smirk: test")
+        os.system('cd ~/TheHatBot/&git pull')
+        await ctx.send("I pulled the code!")
 
     @commands.command()
     async def sayhi(self, ctx):
