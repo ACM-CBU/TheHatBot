@@ -1,3 +1,3 @@
-from .mycog import Mycog
+from .acm_api import Mycog
 def setup(bot):
-    bot.add_cog(Mycog())
+    bot.add_cog(AcmApi())
