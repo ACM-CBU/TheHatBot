@@ -23,6 +23,11 @@ class Mycog(commands.Cog):
     async def gitpull(self, ctx):
         os.system('cd ~/TheHatBot/ && git pull')
         await ctx.send("I pulled the code!")
+        
+    @commands.command()
+    async def gitreset(self, ctx):
+        os.system('git rev-parse HEAD | git reset --hard')
+        await ctx.send("I reset to the latest local git hash.")    
 
     @commands.command()
     async def sayhi(self, ctx):
