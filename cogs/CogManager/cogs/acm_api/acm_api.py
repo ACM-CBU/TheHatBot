@@ -2,6 +2,7 @@ from redbot.core import commands
 from redbot.core import Config
 import os
 import requests
+import json
 
 
 class AcmApi(commands.Cog):
