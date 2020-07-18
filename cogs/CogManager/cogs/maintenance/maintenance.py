@@ -48,9 +48,9 @@ class Maintenance(commands.Cog):
         args.split()
         os.system(f'cd ~/TheHatBot/logs && journalctl --since -u red@TheHatBot -o json-pretty --no-pager > test.json')
 
-        @checks.admin_or_permissions()
-        @commands.command()
-        async def testMessage(self, ctx: commands.Context, *args: str):
-            if not args:
-                return await ctx.send_help()
-            return await ctx.send(args)
+    @checks.admin_or_permissions()
+    @commands.command()
+    async def testMessage(self, ctx: commands.Context, *args: str):
+        if not args:
+            return await ctx.send_help()
+        return await ctx.send(args)
