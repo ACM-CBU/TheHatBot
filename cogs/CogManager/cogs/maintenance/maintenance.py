@@ -15,7 +15,7 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def gitreset(self, ctx: commands.Context):
-        os.system('git rev-parse HEAD | git reset --hard')
+        os.system('cd ~/TheHatBot/ && git rev-parse HEAD | git reset --hard')
         await ctx.send("I reset to the latest local git hash.")
 
     @checks.admin_or_permissions()
@@ -45,8 +45,13 @@ class Maintenance(commands.Cog):
     async def viewLogs(self, ctx: commands.Context, *args: str):
         if not args:
             return await ctx.send_help()
-        args.split()
-        os.system(f'cd ~/TheHatBot/logs && journalctl --since -u red@TheHatBot -o json-pretty --no-pager > test.json')
+
+        arguments = ''
+        for arg in args:
+            arguments += arg + ' '
+
+        print(arguments)
+        os.system(f'journalctl {arguments} -u red@TheHatBot -o json-pretty --no-pager > test.json')
 
     @checks.admin_or_permissions()
     @commands.command()
