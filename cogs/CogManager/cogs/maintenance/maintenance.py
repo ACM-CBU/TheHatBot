@@ -29,9 +29,8 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def reinstallRed(self, ctx: commands.Context):
-        os.system('pyenv shell ACM_BOT && python -m pip install --upgrade --force-reinstall Red-DiscordBot')
-        # sed -i '' -e 's/\.is_owner/.admin_or_permissions/g' s/regex/replacement/
-        os.system( "find /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/ -type f -name \"*.py\" -exec sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' {} +")
+        await ctx.send("I have started to reinstall the Red-DiscordBot python package. I will restart when the changes have been made.")
+        os.system("pyenv shell ACM_BOT && python -m pip install --upgrade --force-reinstall Red-DiscordBot && find /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/ -type f -name \"*.py\" -exec sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' {} + && sudo systemctl restart red@TheHatBot")
         await ctx.send("The redbot python package has been reinstalled and the necessary changes to the packages has been made.")
 
     @checks.admin_or_permissions()
@@ -45,13 +44,19 @@ class Maintenance(commands.Cog):
     async def viewLogs(self, ctx: commands.Context, *args: str):
         if not args:
             return await ctx.send_help()
-
         arguments = ''
         for arg in args:
             arguments += arg + ' '
-
         print(arguments)
         os.system(f'journalctl {arguments} -u red@TheHatBot -o json-pretty --no-pager > test.json')
+        # 	"MESSAGE" : "Started TheHatBot redbot.",
+        # 	"__REALTIME_TIMESTAMP" : "1595382054920981",
+        result_string = ''
+        with open('../../../../test.json', "r") as json_file:
+            log_messages = json.load(json_file)
+            for log_message in log_messages:
+                pass
+
 
     @checks.admin_or_permissions()
     @commands.command()
