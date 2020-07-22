@@ -2,7 +2,7 @@ from redbot.core import commands, checks
 from redbot.core import Config
 
 
-class Maintenance(commands.Cog):
+class Scheduler(commands.Cog):
 
     @checks.admin_or_permissions()
     @commands.command()
