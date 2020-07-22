@@ -15,5 +15,4 @@ class Scheduler(commands.Cog):
     async def addEvent(self, ctx: commands.Context, *args: str):
         if not args:
             return await ctx.send_help()
-        ctx.send("Wait while I add " + args + "to the schedule")
-        ctx.send("I do not work yet. Try again later")
+        return await ctx.send("Wait while I add " + args + "to the schedule")
