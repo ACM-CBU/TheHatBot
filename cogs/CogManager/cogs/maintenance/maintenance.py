@@ -5,6 +5,18 @@ import json
 
 
 class Maintenance(commands.Cog):
+    BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES = "sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/core/core_commands.py"
+    BASH_COMMAND_TO_RESTART_BOT = "sudo systemctl restart red@TheHatBot"
+    BASH_COMMAND_TO_CD_TO_BOT_DIR = "cd ~/TheHatBot/"
+    BASH_COMMAND_TO_PULL_FROM_GIT = "git pull"
+    BASH_COMMAND_TO_RESET_LOCAL_REPO = "git reset HEAD --hard"
+    BASH_COMMAND_TO_USE_PYENV_SHELL = "pyenv shell ACM_BOT"
+    PIP_FLAG_TO_REINSTALL = "--force-reinstall"
+    PIP_FLAG_TO_UPGRADE = "--upgrade"
+    BASH_COMMAND_TO_PIP_INSTALL = "pip install"
+    RED_DISCORD_PIP_PACKAGE = "Red-DiscordBot"
+
+
 
     @checks.admin_or_permissions()
     @commands.command()
@@ -21,22 +33,21 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def updateRed(self, ctx: commands.Context):
-        os.system('pyenv shell ACM_BOT && python -m pip install --upgrade Red-DiscordBot')
+        os.system(f'{self.BASH_COMMAND_TO_USE_PYENV_SHELL} -m {self.BASH_COMMAND_TO_PIP_INSTALL} {self.PIP_FLAG_TO_UPGRADE} {self.RED_DISCORD_PIP_PACKAGE} && {self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES}')
         # sed -i '' -e 's/\.is_owner/.admin_or_permissions/g' s/regex/replacement/
-        os.system("find /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/ -type f -name \"*.py\" -exec sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' {} +")
         await ctx.send("The redbot python package has been updated and the necessary changes to the packages has been made.")
 
     @checks.admin_or_permissions()
     @commands.command()
     async def reinstallRed(self, ctx: commands.Context):
         await ctx.send("I have started to reinstall the Red-DiscordBot python package. I will restart when the changes have been made.")
-        os.system("pyenv shell ACM_BOT && python -m pip install --upgrade --force-reinstall Red-DiscordBot && find /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/ -type f -name \"*.py\" -exec sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' {} + && sudo systemctl restart red@TheHatBot")
+        os.system(f"{self.BASH_COMMAND_TO_USE_PYENV_SHELL} && {self.BASH_COMMAND_TO_PIP_INSTALL} {self.PIP_FLAG_TO_REINSTALL} {self.RED_DISCORD_PIP_PACKAGE} && {self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES} && {self.BASH_COMMAND_TO_RESTART_BOT}")
         await ctx.send("The redbot python package has been reinstalled and the necessary changes to the packages has been made.")
 
     @checks.admin_or_permissions()
     @commands.command()
     async def restartBot(self, ctx: commands.Context):
-        os.system('sudo systemctl restart red@TheHatBot')
+        os.system(f'{self.BASH_COMMAND_TO_RESTART_BOT}')
         await ctx.send("I will be back.")
 
     @checks.admin_or_permissions()
@@ -63,7 +74,7 @@ class Maintenance(commands.Cog):
     async def pipInstallRequirements(self, ctx: commands.Context, *args: str):
         if not args:
             return await ctx.send_help()
-        os.system(f'pyenv shell ACM_BOT && cd ~/TheHatBot && pip install -r requirements.txt')
+        os.system(f'{self.BASH_COMMAND_TO_CD_TO_BOT_DIR} && {self.BASH_COMMAND_TO_USE_PYENV_SHELL} && {self.BASH_COMMAND_TO_PIP_INSTALL} -r requirements.txt')
         await ctx.send("I have installed the python dependencies in requirements.txt")
 
 
