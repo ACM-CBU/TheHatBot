@@ -5,7 +5,7 @@ import json
 
 
 class Maintenance(commands.Cog):
-    BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES = "sed -r -i'' -e 's/\.is_owner/.admin_or_permissions/g' /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/core/core_commands.py"
+    BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES = "sed -r -i'' -e 's/@checks\.is_owner\(\)/@checks.admin_or_permissions()/g' /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/core/core_commands.py"
     BASH_COMMAND_TO_RESTART_BOT = "sudo systemctl restart red@TheHatBot"
     BASH_COMMAND_TO_CD_TO_BOT_DIR = "cd ~/TheHatBot/"
     BASH_COMMAND_TO_PULL_FROM_GIT = "git pull"
