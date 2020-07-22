@@ -8,14 +8,14 @@ class Maintenance(commands.Cog):
 
     @checks.admin_or_permissions()
     @commands.command()
-    async def gitpull(self, ctx: commands.Context):
+    async def gitPull(self, ctx: commands.Context):
         os.system('cd ~/TheHatBot/ && git pull')
         await ctx.send("I pulled the code!")
 
     @checks.admin_or_permissions()
     @commands.command()
-    async def gitreset(self, ctx: commands.Context):
-        os.system('cd ~/TheHatBot/ && git rev-parse HEAD | git reset --hard')
+    async def gitReset(self, ctx: commands.Context):
+        os.system('cd ~/TheHatBot/ && git reset HEAD --hard')
         await ctx.send("I reset to the latest local git hash.")
 
     @checks.admin_or_permissions()
@@ -52,6 +52,17 @@ class Maintenance(commands.Cog):
 
         print(arguments)
         os.system(f'journalctl {arguments} -u red@TheHatBot -o json-pretty --no-pager > test.json')
+
+    @checks.admin_or_permissions()
+    @commands.command()
+    async def pipInstallRequirements(self, ctx: commands.Context, *args: str):
+        if not args:
+            return await ctx.send_help()
+        os.system(f'pyenv shell ACM_BOT && cd ~/TheHatBot && pip install -r requirements.txt')
+        await ctx.send("I have installed the python dependencies in requirements.txt")
+
+
+
 
     @checks.admin_or_permissions()
     @commands.command()
