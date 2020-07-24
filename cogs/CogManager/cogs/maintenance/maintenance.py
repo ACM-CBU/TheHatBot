@@ -61,14 +61,13 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def viewLogs(self, ctx: commands.Context, *args: str):
-        global BASH_COMMAND_TO_CD_TO_BOT_DIR
         if not args:
             return await ctx.send_help()
         arguments = ''
         for arg in args:
             arguments += arg + ' '
         print(arguments)
-        os.system(f'{BASH_COMMAND_TO_CD_TO_BOT_DIR} && journalctl {arguments} -u red@TheHatBot -o --no-pager > test.json')
+        os.system(f'{self.BASH_COMMAND_TO_CD_TO_BOT_DIR} && journalctl {arguments} -u red@TheHatBot -o --no-pager > test.json')
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
