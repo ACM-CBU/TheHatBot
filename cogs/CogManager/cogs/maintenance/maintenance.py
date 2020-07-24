@@ -65,7 +65,8 @@ class Maintenance(commands.Cog):
         if not args:
             return await ctx.send_help()
         kwargs = ["cd", "~/TheHatBot/", "&&", "journalctl", *args, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
-        subprocess.run(kwargs, capture_output=False)
+
+        subprocess.run(kwargs, shell=True)
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
