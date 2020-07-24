@@ -1,7 +1,10 @@
+from datetime import datetime
+from pathlib import Path
+
+from jsonseq.decode import JSONSeqDecoder
 from redbot.core import commands, checks
 from redbot.core import Config
 import os
-import json
 import jsonseq
 
 
@@ -58,21 +61,25 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def viewLogs(self, ctx: commands.Context, *args: str):
+        global BASH_COMMAND_TO_CD_TO_BOT_DIR
         if not args:
             return await ctx.send_help()
         arguments = ''
         for arg in args:
             arguments += arg + ' '
         print(arguments)
-        os.system(f'journalctl {arguments} -u red@TheHatBot -o --no-pager > test.json')
-        # 	"MESSAGE" : "Started TheHatBot redbot.",
-        # 	"__REALTIME_TIMESTAMP" : "1595382054920981",
+        os.system(f'{BASH_COMMAND_TO_CD_TO_BOT_DIR} && journalctl {arguments} -u red@TheHatBot -o --no-pager > test.json')
+        # "MESSAGE" : "Started TheHatBot redbot.",
+        # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
-        # with open('../../../../test.json', "r") as json_file:
-        #     log_messages = json.load(json_file)
-        #     for log_message in log_messages:
-        #         pass
-        await ctx.send("TEST")
+        json_file_path = Path(__file__).parent.parent.parent.parent.parent.joinpath("test.json")
+
+        with open(json_file_path) as f:
+            for obj in JSONSeqDecoder().decode(f):
+                num = int(obj.get("__REALTIME_TIMESTAMP")) // 1000000
+                time_stamp = datetime.fromtimestamp(num).strftime("%Y-%m-%d %I:%M:%S")
+                result_string += f'{time_stamp} -- {obj.get("MESSAGE")}\n'
+        await ctx.send(result_string)
 
     @checks.admin_or_permissions()
     @commands.command()
