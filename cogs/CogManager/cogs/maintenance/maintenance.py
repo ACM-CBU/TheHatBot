@@ -89,10 +89,3 @@ class Maintenance(commands.Cog):
         os.system(
             f'{self.BASH_COMMAND_TO_CD_TO_BOT_DIR} && {self.BASH_COMMAND_TO_USE_PYENV_SHELL} && {self.BASH_COMMAND_TO_PIP_INSTALL} -r requirements.txt')
         await ctx.send("I have installed the python dependencies in requirements.txt")
-
-    @checks.admin_or_permissions()
-    @commands.command
-    async def testMessage(self, ctx: commands.Context, *args: str):
-        if not args:
-            return await ctx.send_help()
-        return await ctx.send(args)
