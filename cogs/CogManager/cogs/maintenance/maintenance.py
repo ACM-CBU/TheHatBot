@@ -64,11 +64,7 @@ class Maintenance(commands.Cog):
     async def viewLogs(self, ctx: commands.Context, *args: str):
         if not args:
             return await ctx.send_help()
-        arguments = ''
-        for arg in args:
-            arguments += arg + ' '
-        print(arguments)
-        kwargs = ["cd", "~/TheHatBot/", "&&", "journalctl", arguments, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
+        kwargs = ["cd", "~/TheHatBot/", "&&", "journalctl", *args, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
         subprocess.run(kwargs, capture_output=False)
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
