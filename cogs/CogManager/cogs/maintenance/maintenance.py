@@ -68,7 +68,7 @@ class Maintenance(commands.Cog):
         for arg in args:
             arguments += arg + ' '
         print(arguments)
-        kwargs = [self.BASH_COMMAND_TO_CD_TO_BOT_DIR, "&&", "journalctl", arguments, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
+        kwargs = ["cd", "~/TheHatBot/", "&&", "journalctl", arguments, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
         subprocess.run(kwargs, capture_output=False)
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
