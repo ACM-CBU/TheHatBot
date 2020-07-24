@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 from pathlib import Path
 
@@ -67,7 +68,8 @@ class Maintenance(commands.Cog):
         for arg in args:
             arguments += arg + ' '
         print(arguments)
-        os.system(f'{self.BASH_COMMAND_TO_CD_TO_BOT_DIR} && journalctl {arguments} -u red@TheHatBot -o --no-pager > test.json')
+        kwargs = [self.BASH_COMMAND_TO_CD_TO_BOT_DIR, "&&", "journalctl", arguments, "-u", "red@TheHatBot", "-o",  "--no-pager",  ">", "test.json"]
+        subprocess.run(kwargs, capture_output=False)
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
