@@ -19,7 +19,7 @@ class Scheduler(commands.Cog):
         def job():
             print("Are you bored yet")
 
-        schedule.every().thursday.at("21:49").do(job)
+        schedule.every().friday.at("22:34").do(job)
 
         while True:
             schedule.run_pending()
