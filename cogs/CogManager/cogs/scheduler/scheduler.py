@@ -16,10 +16,10 @@ class Scheduler(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def addEvent(self, ctx: commands.Context, *args: str):
-        def job():
-            print("Are you bored yet")
+        if not args:
+            return await ctx.send_help()
 
-        schedule.every().friday.at("22:34").do(job)
+        schedule.every().monday.at("1:30").print(args)
 
         while True:
             schedule.run_pending()
