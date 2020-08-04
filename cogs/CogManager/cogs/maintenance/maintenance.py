@@ -92,10 +92,11 @@ class Maintenance(commands.Cog):
             for string in result_string.split('\n'):
                 count += len(string)
                 if count > 2000:
-                    await ctx.send(result_string)
+                    await ctx.send(partial_result)
                     count = len(string)
                     partial_result = string
-                partial_result += string
+                else:
+                    partial_result += string
             result_string = partial_result
         if result_string:
             await ctx.send(result_string)
