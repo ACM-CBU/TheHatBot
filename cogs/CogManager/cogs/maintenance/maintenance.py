@@ -61,23 +61,28 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def viewLogs(self, ctx: commands.Context, *args: str):
+        if not args:
+            return await ctx.send_help()
+
         kwargs = ["journalctl", *args, "-u", "red@TheHatBot", "-o", "json", "--no-pager"]
-        result = subprocess.run(kwargs, capture_output=True, text=True)
-        tmp_json = open("temp.json", 'w')
-        tmp_json.write(result.stdout)
-        tmp_json.close()
+
+        json_file_path = Path(__file__).absolute().parent.parent.parent.parent.parent.joinpath("test.json").absolute()
+
+        json_file = open(json_file_path, 'w')
+        subprocess.call(kwargs, stdout=json_file)
+
+        json_file.close()
         # "MESSAGE" : "Started TheHatBot redbot.",
         # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
-        if result == 0:
-            with open("temp.json") as f:
-                for obj in JSONSeqDecoder().decode(f):
-                    num = int(obj.get("__REALTIME_TIMESTAMP")) // 1000000
-                    time_stamp = datetime.fromtimestamp(num).strftime("%Y-%m-%d %I:%M:%S")
-                    result_string += f'{time_stamp} -- {obj.get("MESSAGE")}\n'
-                f.close()
-        else:
-            result_string = "An error occurred"
+
+        with open(json_file_path.absolute()) as f:
+            # "MESSAGE" : "Started TheHatBot redbot.",
+            # "__REALTIME_TIMESTAMP" : "1595382054920981",
+            for obj in JSONSeqDecoder().decode(f):
+                num = int(obj.get("__REALTIME_TIMESTAMP")) // 1000000
+                time_stamp = datetime.fromtimestamp(num).strftime("%Y-%m-%d %I:%M:%S")
+                result_string += f'{time_stamp} -- {obj.get("MESSAGE")}\n'
         await ctx.send(result_string)
 
     @checks.admin_or_permissions()
