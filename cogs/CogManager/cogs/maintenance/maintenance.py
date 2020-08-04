@@ -83,6 +83,8 @@ class Maintenance(commands.Cog):
                 num = int(obj.get("__REALTIME_TIMESTAMP")) // 1000000
                 time_stamp = datetime.fromtimestamp(num).strftime("%Y-%m-%d %I:%M:%S")
                 result_string += f'{time_stamp} -- {obj.get("MESSAGE")}\n'
+        if not result_string:
+            result_string = "There was no logs for specified time"
         await ctx.send(result_string)
 
     @checks.admin_or_permissions()
