@@ -85,7 +85,20 @@ class Maintenance(commands.Cog):
                 result_string += f'{time_stamp} -- {obj.get("MESSAGE")}\n'
         if not result_string:
             result_string = "There was no logs for specified time"
-        await ctx.send(result_string)
+
+        if len(result_string) > 2000:
+            count = 0
+            partial_result = ''
+            for string in result_string.split('\n'):
+                count += len(string)
+                if count > 2000:
+                    await ctx.send(result_string)
+                    count = len(string)
+                    partial_result = string
+                partial_result += string
+            result_string = partial_result
+        if result_string:
+            await ctx.send(result_string)
 
     @checks.admin_or_permissions()
     @commands.command()
