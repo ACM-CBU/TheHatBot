@@ -86,20 +86,8 @@ class Maintenance(commands.Cog):
         if not result_string:
             result_string = "There was no logs for specified time"
 
-        if len(result_string) > 2000:
-            count = 0
-            partial_result = ''
-            for string in result_string.split('\n'):
-                count += len(string)
-                if count > 2000:
-                    await ctx.send(partial_result)
-                    count = len(string)
-                    partial_result = string
-                else:
-                    partial_result += string
-            result_string = partial_result
-        if result_string:
-            await ctx.send(result_string)
+        for partial_result in pagify(result_string):
+            await ctx.send(partial_result)
 
     @checks.admin_or_permissions()
     @commands.command()
