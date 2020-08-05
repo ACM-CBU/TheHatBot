@@ -1,12 +1,11 @@
+import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
 
+import redbot.core.utils.chat_formatting as chat_formatting
 from jsonseq.decode import JSONSeqDecoder
 from redbot.core import commands, checks
-from redbot.core import Config
-import os
-
 
 
 class Maintenance(commands.Cog):
@@ -72,8 +71,6 @@ class Maintenance(commands.Cog):
         subprocess.call(kwargs, stdout=json_file)
 
         json_file.close()
-        # "MESSAGE" : "Started TheHatBot redbot.",
-        # "__REALTIME_TIMESTAMP" : "1595382054920981",
         result_string = ''
 
         with open(json_file_path.absolute()) as f:
@@ -86,7 +83,7 @@ class Maintenance(commands.Cog):
         if not result_string:
             result_string = "There was no logs for specified time"
 
-        for partial_result in pagify(result_string):
+        for partial_result in chat_formatting.pagify(result_string):
             await ctx.send(partial_result)
 
     @checks.admin_or_permissions()
