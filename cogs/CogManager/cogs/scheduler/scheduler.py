@@ -9,10 +9,11 @@ import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-
+from oauth2client import client
+from oauth2client.service_account import ServiceAccountCredentials
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
 
+scope = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/drive...","https://www.googleapis.com/auth/drive"]
 
 class Scheduler(commands.Cog):
 
@@ -27,7 +28,6 @@ class Scheduler(commands.Cog):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
         # If there are no (valid) credentials available, let the user log in.
-        ctx.channel.send('before creds')
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
