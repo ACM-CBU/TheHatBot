@@ -20,7 +20,7 @@ class Scheduler(commands.Cog):
     @commands.command()
     async def events(self, ctx: commands.Context, *args: str):
         # if args.lower() == 'soon':
-        creds = 'credentialcogs/CogManager/cogs/scheduler/credentials.json'
+        creds = 'cogs/CogManager/cogs/scheduler/creds.json'
         # The file token.pickle stores the user's access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
@@ -33,7 +33,7 @@ class Scheduler(commands.Cog):
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentialcogs/CogManager/cogs/scheduler/credentials.json', SCOPES)
+                    'cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
