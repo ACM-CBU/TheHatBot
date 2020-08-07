@@ -1,16 +1,14 @@
 from __future__ import print_function
 
-import schedule
-import time
-from redbot.core import commands, checks
 import datetime
-import pickle
 import os.path
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+import pickle
+
 from google.auth.transport.requests import Request
-from oauth2client import client
-from oauth2client.service_account import ServiceAccountCredentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from redbot.core import commands
+
 # If modifying these scopes, delete the file token.pickle.
 
 scope = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/drive...","https://www.googleapis.com/auth/drive"]
@@ -33,7 +31,7 @@ class Scheduler(commands.Cog):
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
+                    'cogs/CogManager/cogs/scheduler/creds.json', scope)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
