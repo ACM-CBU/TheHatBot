@@ -38,7 +38,7 @@ class Scheduler(commands.Cog):
             with open('token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
 
-        service = build('calendar', 'v3', credentials=creds)
+        service = build('calendar', 'v3', http=creds.authorize(Http()))
 
         # Call the Calendar API
         now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
