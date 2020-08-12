@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 from googleapiclient.discovery import build
 from httplib2 import Http
-from oauth2client import file, client, tools
+import oauth2client
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
@@ -22,11 +22,11 @@ async def events(self, ctx: commands.Context, *args: str):
     run_at = now + timedelta(hours=3)
     delay = (run_at - now).total_seconds()
     #Begin Google Calander API
-    store = file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
+    store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
     creds = store.get()
     if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
-        creds = tools.run_flow(flow, store)
+        flow = oauth2client.client.flow_from_clientsecrets('credentials.json', SCOPES)
+        creds = oauth2client.tools.run_flow(flow, store)
     service = build('calendar', 'v3', http=creds.authorize(Http()))
     now = datetime.datetime.utcnow().isoformat() + 'Z'
         #Retrieve all Events
