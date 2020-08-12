@@ -1,55 +1,88 @@
 from __future__ import print_function
 
 import datetime
-import os.path
-import pickle
+from datetime import timedelta
 
-from google.auth.transport.requests import Request
-from google_auth_oauthlib.flow import InstalledAppFlow
+import discord
+from discord.ext import commands
 from googleapiclient.discovery import build
-from redbot.core import commands
+from httplib2 import Http
+from oauth2client import file, client, tools
 
-# If modifying these scopes, delete the file token.pickle.
+SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
-scope = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events","https://www.googleapis.com/auth/drive...","https://www.googleapis.com/auth/drive"]
 
-class Scheduler(commands.Cog):
+client = discord.Client()
 
-    @commands.command()
-    async def events(self, ctx: commands.Context, *args: str):
-        # if args.lower() == 'soon':
-        creds = 'cogs/CogManager/cogs/scheduler/creds.json'
-        # The file token.pickle stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first
-        # time.
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-        # If there are no (valid) credentials available, let the user log in.
-        # if not creds or not creds.valid:
-        if not creds:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    'cogs/CogManager/cogs/scheduler/creds.json', scope)
-                creds = flow.run_local_server(port=0)
-            # Save the credentials for the next run
-            with open('token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
 
-        service = build('calendar', 'v3', http=creds.authorize(Http()))
 
-        # Call the Calendar API
-        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        ctx.channel.send('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
+async def events(self, ctx: commands.Context, *args: str):
+    print("Upcoming")
+    now = datetime.datetime.now()
+    run_at = now + timedelta(hours=3)
+    delay = (run_at - now).total_seconds()
+    #Begin Google Calander API
+    store = file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
+    creds = store.get()
+    if not creds or creds.invalid:
+        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('calendar', 'v3', http=creds.authorize(Http()))
+    now = datetime.datetime.utcnow().isoformat() + 'Z'
+        #Retrieve all Events
+    events_result = service.events().list(calendarId='CENSORED', timeMin=now,maxResults=250, singleEvents=True,orderBy='startTime').execute()
+    events = events_result.get('items', [])
 
-        if not events:
-            ctx.channel.send('No upcoming events found.')
-        for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            ctx.channel.send()
+        #Currentmode stores if searching for tommorow, the week, or other (1,2,3)
+    Currentmode = 0
+    UMode=1
+    none = True
+        #Gets end of week
+    dt = datetime.datetime.now()
+    startweek = dt - timedelta(days=dt.weekday())
+    endweek = startweek + timedelta(days=6)
+    dtstring = str(dt.date())
+    TheMessages = "**" + dtstring + " Report**"
+    ctx.channel.send(TheMessages)
+    if not events:
+        ctx.channel.send('No upcoming events')
+    for event in events:
+
+        if Currentmode == 0:
+            ctx.channel.send('Tommorow')
+            Currentmode = 1
+
+        thestr = event['start'].get('dateTime')
+
+        count = 0
+        count2 = 0
+        for x in thestr:
+            count += 1
+            if x == "-":
+                count2 +=1
+                if count2 == 3:
+                    break
+        count = count - 1
+        thestr = thestr[0:count]
+
+
+        start = datetime.datetime.strptime(thestr, "%Y-%m-%dT%H:%M:%S")
+
+        if (start - dt).days <= 7 and Currentmode == 1:
+            if UMode == 1:
+                ctx.channel.send('None')
+                ctx.channel.send('in the next 7 days')
+            UMode = 2
+            Currentmode = 2
+        elif (start - dt).days >= 7 and (Currentmode == 1 or Currentmode == 2):
+            if UMode == 1:
+                ctx.channel.send('None')
+                ctx.channel.send('in the next 7 days')
+                ctx.channel.send('None')
+            ctx.channel.send('Longterm')
+            Currentmode = 3
+            UMode = 3
+        FirstMessage = str(start.date())
+        SecondMessage = event['summary']
+        ThirdMessage= FirstMessage + " " + SecondMessage
+        ctx.channel.send(ThirdMessage)
