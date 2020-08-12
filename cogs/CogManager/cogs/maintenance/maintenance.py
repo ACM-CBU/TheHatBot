@@ -6,7 +6,7 @@ import redbot.core.utils.chat_formatting as chat_formatting
 from jsonseq.decode import JSONSeqDecoder
 from redbot.core import commands, checks
 
-from cogs.CogManager.cogs.maintenance.maintenance_helper import MaintenanceHelper
+from .maintenance_helper import MaintenanceHelper
 
 
 class Maintenance(commands.Cog):
