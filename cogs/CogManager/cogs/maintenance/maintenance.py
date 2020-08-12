@@ -2,10 +2,11 @@ import os
 import subprocess
 from datetime import datetime
 from pathlib import Path
-
 import redbot.core.utils.chat_formatting as chat_formatting
 from jsonseq.decode import JSONSeqDecoder
 from redbot.core import commands, checks
+
+from cogs.CogManager.cogs.maintenance.maintenance_helper import MaintenanceHelper
 
 
 class Maintenance(commands.Cog):
@@ -76,9 +77,12 @@ class Maintenance(commands.Cog):
 
     @checks.admin_or_permissions()
     @commands.command()
-    async def pipInstallRequirements(self, ctx: commands.Context, *args: str):
-        if not args:
-            return await ctx.send_help()
-        os.system(
-            f'{self.BASH_COMMAND_TO_CD_TO_BOT_DIR} && {self.BASH_COMMAND_TO_USE_PYENV_SHELL} && {self.BASH_COMMAND_TO_PIP_INSTALL} -r requirements.txt')
-        await ctx.send("I have installed the python dependencies in requirements.txt")
+    async def pipInstallRequirements(self, ctx: commands.Context):
+        MaintenanceHelper.install_requirements()
+        await ctx.send("I have installed all the requirements in requirements.txt")
+
+    @checks.admin_or_permissions()
+    @commands.command()
+    async def pipInstall(self, ctx: commands.Context, package: str):
+        MaintenanceHelper.install(package)
+        await ctx.send(f"I have installed the package: {package}")
