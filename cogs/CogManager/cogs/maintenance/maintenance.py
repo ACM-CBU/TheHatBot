@@ -22,18 +22,6 @@ class Maintenance(commands.Cog):
 
     @checks.admin_or_permissions()
     @commands.command()
-    async def gitPull(self, ctx: commands.Context):
-        os.system('cd ~/TheHatBot/ && git pull')
-        await ctx.send("I pulled the code!")
-
-    @checks.admin_or_permissions()
-    @commands.command()
-    async def gitReset(self, ctx: commands.Context):
-        os.system('cd ~/TheHatBot/ && git reset HEAD --hard')
-        await ctx.send("I reset to the latest local git hash.")
-
-    @checks.admin_or_permissions()
-    @commands.command()
     async def updateRed(self, ctx: commands.Context):
         os.system(
             f'{self.BASH_COMMAND_TO_USE_PYENV_SHELL} -m {self.BASH_COMMAND_TO_PIP_INSTALL} {self.PIP_FLAG_TO_UPGRADE} {self.RED_DISCORD_PIP_PACKAGE} && {self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES}')

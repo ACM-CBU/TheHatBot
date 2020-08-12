@@ -14,14 +14,15 @@ class School(commands.Cog):
         }
         self.config.register_global(**default_global)
     '''
-
+    tutor_list = ['Steven']
     @commands.command()
-    async def get_tutor_link(self, ctx):
+    async def get_tutor_link(self, ctx, tutor):
         # link for tutor pre-filled
         # https://docs.google.com/forms/d/e/1FAIpQLScckX09i7Dfv27_k1On8-GlkrB8OOF1l8twY9u_OeGzLc7u6Q/viewform?usp=pp_url&entry.814127073=2020-05-09&entry.1520997077=Chase
         # 2020-05-09
+        assert tutor in self.tutor_list
         today = date.today().strftime('%Y-%m-%d')
-        await ctx.send("https://docs.google.com/forms/d/e/1FAIpQLScckX09i7Dfv27_k1On8-GlkrB8OOF1l8twY9u_OeGzLc7u6Q/viewform?usp=pp_url&entry.814127073={0}".format(today))
+        await ctx.send(f"https://docs.google.com/forms/d/e/1FAIpQLScckX09i7Dfv27_k1On8-GlkrB8OOF1l8twY9u_OeGzLc7u6Q/viewform?usp=pp_url&entry.814127073={today}&entry.1520997077={tutor}")
 
     @commands.command()
     async def get(self, ctx, *, text):
