@@ -12,20 +12,13 @@ from .maintenance_helper import MaintenanceHelper
 class Maintenance(commands.Cog):
     BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES = "sed -r -i'' -e 's/@checks\.is_owner\(\)/@checks.admin_or_permissions()/g' /home/pi/.pyenv/versions/ACM_BOT/lib/python3.8/site-packages/redbot/core/core_commands.py"
     BASH_COMMAND_TO_RESTART_BOT = "sudo systemctl restart red@TheHatBot"
-    BASH_COMMAND_TO_CD_TO_BOT_DIR = "cd ~/TheHatBot/"
-    BASH_COMMAND_TO_PULL_FROM_GIT = "git pull"
-    BASH_COMMAND_TO_RESET_LOCAL_REPO = "git reset HEAD --hard"
-    BASH_COMMAND_TO_USE_PYENV_SHELL = "pyenv shell ACM_BOT"
-    PIP_FLAG_TO_REINSTALL = "--force-reinstall"
-    PIP_FLAG_TO_UPGRADE = "--upgrade"
-    BASH_COMMAND_TO_PIP_INSTALL = "pip install"
     RED_DISCORD_PIP_PACKAGE = "Red-DiscordBot"
 
     @checks.admin_or_permissions()
     @commands.command()
     async def updateRed(self, ctx: commands.Context):
-        os.system(
-            f'{self.BASH_COMMAND_TO_USE_PYENV_SHELL} -m {self.BASH_COMMAND_TO_PIP_INSTALL} {self.PIP_FLAG_TO_UPGRADE} {self.RED_DISCORD_PIP_PACKAGE} && {self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES}')
+        MaintenanceHelper.upgrade_package(self.RED_DISCORD_PIP_PACKAGE)
+        os.system(self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES)
         # sed -i '' -e 's/\.is_owner/.admin_or_permissions/g' s/regex/replacement/
         await ctx.send(
             "The redbot python package has been updated and the necessary changes to the packages has been made.")
@@ -35,15 +28,17 @@ class Maintenance(commands.Cog):
     async def reinstallRed(self, ctx: commands.Context):
         await ctx.send(
             "I have started to reinstall the Red-DiscordBot python package. I will restart when the changes have been made.")
-        os.system(
-            f"{self.BASH_COMMAND_TO_USE_PYENV_SHELL} && {self.BASH_COMMAND_TO_PIP_INSTALL} {self.PIP_FLAG_TO_REINSTALL} {self.RED_DISCORD_PIP_PACKAGE} && {self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES} && {self.BASH_COMMAND_TO_RESTART_BOT}")
+        MaintenanceHelper.force_reinstall_package(self.RED_DISCORD_PIP_PACKAGE)
+        os.system(self.BASH_COMMAND_TO_MAKE_PERMISSION_CHANGES)
         await ctx.send(
-            "The redbot python package has been reinstalled and the necessary changes to the packages has been made.")
+            "The redbot python package has been reinstalled and the necessary changes to the packages has been made. "
+            "Restarting...")
+        await self.restartBot(ctx)
 
     @checks.admin_or_permissions()
     @commands.command()
     async def restartBot(self, ctx: commands.Context):
-        os.system(f'{self.BASH_COMMAND_TO_RESTART_BOT}')
+        os.system(self.BASH_COMMAND_TO_RESTART_BOT)
         await ctx.send("I will be back.")
 
     @checks.admin_or_permissions()
@@ -86,5 +81,5 @@ class Maintenance(commands.Cog):
     async def pipInstall(self, ctx: commands.Context, package: str):
         if not package:
             await ctx.send_help()
-        MaintenanceHelper.install(package)
+        MaintenanceHelper.install_package(package)
         await ctx.send(f"I have installed the package: {package}")

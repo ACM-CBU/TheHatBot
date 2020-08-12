@@ -4,11 +4,27 @@ import pip
 
 
 class MaintenanceHelper:
+    PIP_FLAG_TO_REINSTALL = "--force-reinstall"
+    PIP_FLAG_TO_UPGRADE = "--upgrade"
 
     @staticmethod
-    def install(package):
+    def install_package(package):
         if hasattr(pip, 'main'):
             pip.main(['install', package])
+        else:
+            pip._internal.main(['install', package])
+
+    @classmethod
+    def force_reinstall_package(cls, package):
+        if hasattr(pip, 'main'):
+            pip.main(['install', cls.PIP_FLAG_TO_REINSTALL, package])
+        else:
+            pip._internal.main(['install', package])
+
+    @classmethod
+    def upgrade_package(cls, package):
+        if hasattr(pip, 'main'):
+            pip.main(['install', cls.PIP_FLAG_TO_UPGRADE, package])
         else:
             pip._internal.main(['install', package])
 
