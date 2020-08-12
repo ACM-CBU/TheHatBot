@@ -84,5 +84,7 @@ class Maintenance(commands.Cog):
     @checks.admin_or_permissions()
     @commands.command()
     async def pipInstall(self, ctx: commands.Context, package: str):
+        if not package:
+            await ctx.send_help()
         MaintenanceHelper.install(package)
         await ctx.send(f"I have installed the package: {package}")
