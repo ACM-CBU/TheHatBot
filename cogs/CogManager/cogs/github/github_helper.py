@@ -3,18 +3,20 @@ import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
 class GitHubHelper:
 
     @staticmethod
     def make_driver():
-        options = Options()
-        options.headless = True
-        caps = DesiredCapabilities.CHROME
-        caps['goog:loggingPrefs'] = {'performance': 'ALL'}
-        return webdriver.Chrome(desired_capabilities=caps, options=options)
+        # selenium depends on the browser installed, and the driver version to be compatible.
+        # with a pi running raspian it is easy enough to install the driver
+        # with sudo apt-get install chromium-chromedriver
+        chrome_options = Options()
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+        return webdriver.Chrome(options=chrome_options)
 
     @staticmethod
     def login_to_github(driver: WebDriver, username: str, password: str):
