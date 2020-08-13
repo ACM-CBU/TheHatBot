@@ -24,19 +24,23 @@ class Scheduler(commands.Cog):
         now = datetime.datetime.now()
         run_at = now + timedelta(hours=3)
         delay = (run_at - now).total_seconds()
+
         #Begin Google Calander API
-        store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
-        creds = store.get()
+        # store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
+        # creds = store.get()
+        #2 lines above are what I had but I think this might work
+        creds = 'cogs/CogManager/cogs/scheduler/creds.json'
         if not creds or creds.invalid:
-            flow = oauth2client.client.flow_from_clientsecrets('credentials.json', SCOPES)
+            flow = oauth2client.client.flow_from_clientsecrets('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
             creds = oauth2client.tools.run_flow(flow, store)
         service = build('calendar', 'v3', http=creds.authorize(Http()))
         now = datetime.datetime.utcnow().isoformat() + 'Z'
-            #Retrieve all Events
+
+        #Get all Events
         events_result = service.events().list(calendarId='CENSORED', timeMin=now,maxResults=250, singleEvents=True,orderBy='startTime').execute()
         events = events_result.get('items', [])
 
-            #Currentmode stores if searching for tommorow, the week, or other (1,2,3)
+        #Currentmode stores if searching for tommorow, the week, or other (1,2,3)
         Currentmode = 0
         UMode=1
         none = True
