@@ -8,6 +8,7 @@ from discord.ext import commands
 from googleapiclient.discovery import build
 from httplib2 import Http
 import oauth2client
+from redbot.core import commands, checks
 
 SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 
