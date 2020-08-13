@@ -15,6 +15,9 @@ SCOPES = 'https://www.googleapis.com/auth/calendar.readonly'
 client = discord.Client()
 
 class Scheduler(commands.Cog):
+
+    @checks.admin_or_permissions()
+    @commands.command()
     async def events(self, ctx: commands.Context, *args: str):
         print("Upcoming")
         now = datetime.datetime.now()
