@@ -1,6 +1,8 @@
 from __future__ import print_function
 
 import datetime
+import os
+import pickle
 from datetime import timedelta
 
 import discord
@@ -29,6 +31,10 @@ class Scheduler(commands.Cog):
         # store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
         # creds = store.get()
         creds = 'cogs/CogManager/cogs/scheduler/creds.json'
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+            # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             flow = InstalledAppFlow.from_client_secrets_file('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
             creds = flow.run_local_server(port=0)
