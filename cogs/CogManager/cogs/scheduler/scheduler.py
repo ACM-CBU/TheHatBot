@@ -4,6 +4,7 @@ import datetime
 from datetime import timedelta
 
 import discord
+from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from httplib2 import Http
 import oauth2client
@@ -28,9 +29,9 @@ class Scheduler(commands.Cog):
         # store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
         # creds = store.get()
         creds = 'cogs/CogManager/cogs/scheduler/creds.json'
-        # if not creds or not creds.valid:
-        #     flow = oauth2client.client.flow_from_clientsecrets('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
-        #     creds = oauth2client.tools.run_flow(flow, 'cogs/CogManager/cogs/scheduler/creds.json')
+        if not creds or not creds.valid:
+            flow = InstalledAppFlow.from_client_secrets_file('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
+            creds = flow.run_local_server(port=0)
         service = build('calendar', 'v3', http=creds.authorize(Http()))
         now = datetime.datetime.utcnow().isoformat() + 'Z'
 
