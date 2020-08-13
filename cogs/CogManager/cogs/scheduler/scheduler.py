@@ -28,9 +28,9 @@ class Scheduler(commands.Cog):
         # store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
         # creds = store.get()
         creds = 'cogs/CogManager/cogs/scheduler/creds.json'
-        if not creds or not creds.valid:
-            flow = oauth2client.client.flow_from_clientsecrets('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
-            creds = oauth2client.tools.run_flow(flow, 'cogs/CogManager/cogs/scheduler/creds.json')
+        # if not creds or not creds.valid:
+        #     flow = oauth2client.client.flow_from_clientsecrets('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
+        #     creds = oauth2client.tools.run_flow(flow, 'cogs/CogManager/cogs/scheduler/creds.json')
         service = build('calendar', 'v3', http=creds.authorize(Http()))
         now = datetime.datetime.utcnow().isoformat() + 'Z'
 
