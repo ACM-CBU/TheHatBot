@@ -4,7 +4,6 @@ import datetime
 from datetime import timedelta
 
 import discord
-from discord.ext import commands
 from googleapiclient.discovery import build
 from httplib2 import Http
 import oauth2client
@@ -26,10 +25,8 @@ class Scheduler(commands.Cog):
         delay = (run_at - now).total_seconds()
 
         #Begin Google Calander API
-        # store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
-        # creds = store.get()
-        #2 lines above are what I had but I think this might work
-        creds = 'cogs/CogManager/cogs/scheduler/creds.json'
+        store = oauth2client.file.Storage('cogs/CogManager/cogs/scheduler/creds.json')
+        creds = store.get()
         if not creds or not creds.valid:
             flow = oauth2client.client.flow_from_clientsecrets('cogs/CogManager/cogs/scheduler/creds.json', SCOPES)
             creds = oauth2client.tools.run_flow(flow, store)
