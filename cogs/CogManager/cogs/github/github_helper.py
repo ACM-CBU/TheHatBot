@@ -42,3 +42,9 @@ class GitHubHelper:
         assert "Page not found" not in driver.title
         driver.find_element_by_xpath(send_invite_button).click()
         return driver
+
+    @staticmethod
+    def is_valid_github_user(driver: WebDriver, user: str):
+        user_page = f'https://github.com/{user}'
+        driver.get(user_page)
+        return 'Page not found' not in driver.title

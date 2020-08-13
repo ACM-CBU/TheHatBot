@@ -1,5 +1,5 @@
 import os
-
+import requests
 from redbot.core import checks
 from redbot.core.commands import commands, Context
 from .github_helper import GitHubHelper
@@ -24,12 +24,9 @@ class GitHub(commands.Cog):
         if not github_username:
             await ctx.send_help()
         driver = GitHubHelper.make_driver()
-        admin_username = 'some username'  # TODO get admin username
-        admin_password = 'some password'  # TODO get admin password
-        GitHubHelper.login_to_github(driver=driver, username=admin_username, password=admin_password)
         try:
-            GitHubHelper.add_user_to_organization(driver=driver, organization_name="ACN-CBU",
-                                                  user_to_add=github_username)
+            GitHubHelper.is_valid_github_user(driver=driver, user=github_username)
+            # TODO add request for the API
             await ctx.send(f'Check your email associated with the github account: {github_username}')
         except AssertionError:
             await ctx.send(f'Could not find the github account with the username of: {github_username}')
