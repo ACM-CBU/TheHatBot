@@ -48,6 +48,7 @@ class Scheduler(commands.Cog):
     @commands.command()
     async def getEvents(self, ctx: commands.Context):
         # Call the Calendar API
+        await ctx.send('starting google api')
         service = self.build_google_calendar_service()
         now = datetime.datetime.utcnow().isoformat() + 'Z'  # 'Z' indicates UTC time
         await ctx.send('Getting the upcoming 10 events')
