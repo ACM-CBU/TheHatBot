@@ -28,7 +28,7 @@ class Scheduler(commands.Cog):
         delay = (run_at - now).total_seconds()
 
         # Begin Google Calander API
-        creds = 'cogs/CogManager/cogs/scheduler/creds.json'
+        creds = None
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
