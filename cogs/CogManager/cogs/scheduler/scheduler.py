@@ -3,6 +3,7 @@ from __future__ import print_function
 import os
 import pickle
 import datetime
+from pathlib import Path
 
 import discord
 from google_auth_httplib2 import Request
@@ -36,7 +37,7 @@ class Scheduler(commands.Cog):
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', SCOPES)
+                    Path(__file__).absolute().parent.joinpath("credentials.json").absolute(), SCOPES)
                 creds = flow.run_local_server(port=0)
             # Save the credentials for the next run
             with open('token.pickle', 'wb') as token:
