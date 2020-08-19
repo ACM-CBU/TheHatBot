@@ -26,7 +26,7 @@ class GitHub(commands.Cog):
         driver = GitHubHelper.make_driver()
         try:
             GitHubHelper.is_valid_github_user(driver=driver, user=github_username)
-            # TODO add request for the API
+            requests.post(url='http://10.147.19.43:41434/api/v1/github_invite', data={"username": github_username})
             await ctx.send(f'Check your email associated with the github account: {github_username}')
         except AssertionError:
             await ctx.send(f'Could not find the github account with the username of: {github_username}')
