@@ -68,7 +68,7 @@ class Maintenance(commands.Cog):
             result_string = "There was no logs for specified time"
 
         for partial_result in chat_formatting.pagify(result_string):
-            await ctx.send(partial_result)
+            await ctx.send(chat_formatting.box(partial_result, lang='python'))
 
     @checks.admin_or_permissions()
     @commands.command()
