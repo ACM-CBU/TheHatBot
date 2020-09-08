@@ -30,3 +30,14 @@ class GitHub(commands.Cog):
             await ctx.send(f'Check your email associated with the github account: {github_username}')
         except AssertionError:
             await ctx.send(f'Could not find the github account with the username of: {github_username}')
+
+    @checks.admin_or_permissions()
+    @commands.command()
+    async def cloneTestRepo(self, ctx: Context, github_repo_url: str):
+        if not github_repo_url:
+            await ctx.send_help()
+        if 'github.com/ACM-CBU' in github_repo_url:
+            os.system('mkdir TestRepos')
+            os.system(f'cd ~/TestRepos && git clone {github_repo_url}')
+        else:
+            await ctx.send("The repository must be within the ACM GitHub Organization")
