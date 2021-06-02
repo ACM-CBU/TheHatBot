@@ -50,7 +50,7 @@ smmap==3.0.4
 tqdm==4.45.0
 typing-extensions==3.7.4.2
 uritemplate==3.0.1
-urllib3==1.25.10
+urllib3==1.26.5
 uvloop==0.14.0
 websockets==8.1
 yarl==1.4.2
